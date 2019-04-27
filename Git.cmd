@@ -1,0 +1,1 @@
+PortableGit\git-cmd.exe
