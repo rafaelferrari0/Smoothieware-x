@@ -86,6 +86,8 @@ class Robot : public Module {
             bool segment_z_moves:1;
             bool save_g92:1;                                  // save g92 on M500 if set
             bool is_g123:1;
+            bool soft_endstop_enabled:1;
+            bool soft_endstop_halt:1;
             uint8_t plane_axis_0:2;                           // Current plane ( XY, XZ, YZ )
             uint8_t plane_axis_1:2;
             uint8_t plane_axis_2:2;
@@ -141,6 +143,8 @@ class Robot : public Module {
         // computational efficiency of generating arcs.
         int arc_correction;                                  // Setting : how often to rectify arc computation
         float max_speeds[3];                                 // Setting : max allowable speed in mm/s for each axis
+
+        float soft_endstop_min[3], soft_endstop_max[3];
 
         uint8_t selected_extruder;
         uint8_t n_motors;                                    //count of the motors/axis registered

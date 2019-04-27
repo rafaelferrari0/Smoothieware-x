@@ -862,7 +862,7 @@ void Endstops::on_get_public_data(void* argument)
         bool *homing = static_cast<bool *>(pdr->get_data_ptr());
         *homing = this->status != NOT_HOMING;
         pdr->set_taken();
-    }
+    } 
 }
 
 void Endstops::on_set_public_data(void* argument)
