@@ -236,6 +236,15 @@ alpha_max_travel                             500              # max travel in mm
 beta_max_travel                              500              # max travel in mm for beta/Y axis when homing
 gamma_max_travel                             500              # max travel in mm for gamma/Z axis when homing
 
+soft_endstop.enable                          true             # enable soft endstops
+soft_endstop.halt                            false            # HALT when soft endstop triggered (safest) when set to false the entire move will just be ignored
+soft_endstop.x_min                           0.0              # minimum X
+soft_endstop.y_min                           0.0              # minimum Y
+#soft_endstop.z_min                          0.0              # minimum Z NOTE leave commented out to disable checking for this axis
+soft_endstop.x_max                           520.0            # maximum X
+soft_endstop.y_max                           520.0            # maximum Y
+#soft_endstop.z_max                          40.0             # maximum Z NOTE leave commented out to disable checking for this axis
+
 # optional order in which axis will home, default is they all home at the same time,
 # if this is set it will force each axis to home one at a time in the specified order
 #homing_order                                 XYZ              # x axis followed by y then z last
