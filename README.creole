@@ -1,6 +1,14 @@
 ==About Smoothieware-x
 This version is based on stable Smoothieware (cloned on Apr/2019) with folowing new features:
 * Soft Endstops
+{{{
+Just edit soft_endstop. parameters on config file to establish limits
+}}}
+* Z Babystepping with M290 Znnn gcode
+{{{
+M290 Z0.05    ;babystep the head up 0.05mm
+M290 Z-0.05   ;babystep the head down 0.05mm
+}}}
 
 ==Overview
 Smoothie is a free, opensource, high performance G-code interpreter and CNC controller written in Object-Oriented C++ for the LPC17xx micro-controller ( ARM Cortex M3 architecture ). It will run on a mBed, a LPCXpresso, a SmoothieBoard, R2C2 or any other LPC17xx-based board. The motion control part is a port of the awesome grbl.
