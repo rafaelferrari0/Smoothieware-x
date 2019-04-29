@@ -120,6 +120,7 @@ Robot::Robot()
     this->get_e_scale_fnc= nullptr;
     this->wcs_offsets.fill(wcs_t(0.0F, 0.0F, 0.0F));
     this->g92_offset = wcs_t(0.0F, 0.0F, 0.0F);
+    this->z_babystep=0;
     this->next_command_is_MCS = false;
     this->disable_segmentation= false;
     this->disable_arm_solution= false;
@@ -712,6 +713,19 @@ void Robot::on_gcode_received(void *argument)
                     gcode->stream->printf("Speed factor at %6.2f %%\n", 6000.0F / seconds_per_minute);
                 }
                 break;
+                    
+              case 290:   // Z babystep implementation // eg: M290 Z0.05 
+                    float bz;
+                    if(gcode->has_letter('Z')) {
+                      bz = gcode->get_value('Z');
+                      if (bz!=0) {
+                        z_babystep += bz;
+                        last_milestone[Z_AXIS] += bz;
+                      } else {
+                        z_babystep=0;
+                      }
+                    }                    
+                break;
 
             case 400: // wait until all moves are done up to this point
                 THEKERNEL->conveyor->wait_for_idle();
@@ -851,7 +865,7 @@ void Robot::process_move(Gcode *gcode, enum MOTION_MODE_T motion_mode)
             }
 
             if(!isnan(param[Z_AXIS])) {
-                target[Z_AXIS]= param[Z_AXIS] + std::get<Z_AXIS>(wcs_offsets[current_wcs]) - std::get<Z_AXIS>(g92_offset) + std::get<Z_AXIS>(tool_offset);
+                target[Z_AXIS]= param[Z_AXIS] + std::get<Z_AXIS>(wcs_offsets[current_wcs]) - std::get<Z_AXIS>(g92_offset) + std::get<Z_AXIS>(tool_offset) + z_babystep;
             }
 
         }else{
@@ -866,6 +880,10 @@ void Robot::process_move(Gcode *gcode, enum MOTION_MODE_T motion_mode)
         for(int i= X_AXIS; i <= Z_AXIS; ++i) {
             if(!isnan(param[i])) target[i] = param[i];
         }
+          
+        if (z_babystep!=0)
+          if(!isnan(param[Z_AXIS]))
+            target[Z_AXIS] += z_babystep;
     }
 
     // process extruder parameters, for active extruder only (only one active extruder at a time)
@@ -936,6 +954,9 @@ void Robot::process_move(Gcode *gcode, enum MOTION_MODE_T motion_mode)
 // so in those cases the final position is compensated.
 void Robot::reset_axis_position(float x, float y, float z)
 {
+    // clear babystepping  
+    z_babystep=0;
+      
     // these are set to the same as compensation was not used to get to the current position
     last_machine_position[X_AXIS]= last_milestone[X_AXIS] = x;
     last_machine_position[Y_AXIS]= last_milestone[Y_AXIS] = y;
