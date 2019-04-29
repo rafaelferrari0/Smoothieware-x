@@ -119,6 +119,7 @@ class Robot : public Module {
         wcs_t g92_offset;
         wcs_t tool_offset; // used for multiple extruders, sets the tool offset for the current extruder applied first
         std::tuple<float, float, float, uint8_t> last_probe_position{0,0,0,0};
+        float z_babystep;
 
         using saved_state_t= std::tuple<float, float, bool, bool, bool, uint8_t>; // save current feedrate and absolute mode, e absolute mode, inch mode, current_wcs
         std::stack<saved_state_t> state_stack;               // saves state from M120
