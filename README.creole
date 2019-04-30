@@ -1,5 +1,5 @@
 ==About Smoothieware-x
-This version is based on stable Smoothieware (cloned on Apr/2019) with folowing new features:
+This version is based on stable Smoothieware (cloned on Apr 2019, last commit 2 Jan 2017) with folowing new features:
 * Soft Endstops
 {{{
 Just edit soft_endstop. parameters on config file to establish limits
